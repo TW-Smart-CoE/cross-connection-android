@@ -3,14 +3,14 @@
  **
  */
 
-package com.thoughtworks.cconn.detect.nsd.detector
+package com.thoughtworks.cconn.network.nsd.detector
 
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.util.Log
-import com.thoughtworks.cconn.definitions.BLINDHMI_CONNECTION_TAG
-import com.thoughtworks.cconn.detect.OnFoundService
-import com.thoughtworks.cconn.detect.nsd.definitions.TCP_SERVICE_NAME
+import com.thoughtworks.cconn.definitions.CCONN_TAG
+import com.thoughtworks.cconn.network.OnFoundService
+import com.thoughtworks.cconn.network.nsd.definitions.TCP_SERVICE_NAME
 import java.util.Properties
 
 internal class NSDDiscovery(
@@ -23,7 +23,7 @@ internal class NSDDiscovery(
     init {
         nsdDiscoveryListener = object : NsdManager.DiscoveryListener {
             override fun onServiceFound(serviceInfo: NsdServiceInfo) {
-                Log.d(BLINDHMI_CONNECTION_TAG, "onServiceFound Info: --> $serviceInfo")
+                Log.d(CCONN_TAG, "onServiceFound Info: --> $serviceInfo")
                 if (serviceInfo.serviceName == TCP_SERVICE_NAME) {
                     val resolveListener = createResolveListener()
                     nsdManager.resolveService(serviceInfo, resolveListener)
@@ -32,23 +32,23 @@ internal class NSDDiscovery(
             }
 
             override fun onStopDiscoveryFailed(serviceType: String?, errorCode: Int) {
-                Log.e(BLINDHMI_CONNECTION_TAG, "onStopDiscoveryFailed errorCode: --> $errorCode")
+                Log.e(CCONN_TAG, "onStopDiscoveryFailed errorCode: --> $errorCode")
             }
 
             override fun onStartDiscoveryFailed(serviceType: String?, errorCode: Int) {
-                Log.e(BLINDHMI_CONNECTION_TAG, "onStartDiscoveryFailed errorCode: --> $errorCode")
+                Log.e(CCONN_TAG, "onStartDiscoveryFailed errorCode: --> $errorCode")
             }
 
             override fun onDiscoveryStarted(serviceType: String?) {
-                Log.d(BLINDHMI_CONNECTION_TAG, "onDiscoveryStarted")
+                Log.d(CCONN_TAG, "onDiscoveryStarted")
             }
 
             override fun onDiscoveryStopped(serviceType: String?) {
-                Log.d(BLINDHMI_CONNECTION_TAG, "onDiscoveryStopped")
+                Log.d(CCONN_TAG, "onDiscoveryStopped")
             }
 
             override fun onServiceLost(serviceInfo: NsdServiceInfo?) {
-                Log.e(BLINDHMI_CONNECTION_TAG, "onServiceLost")
+                Log.e(CCONN_TAG, "onServiceLost")
             }
         }
     }
@@ -60,7 +60,7 @@ internal class NSDDiscovery(
 
             override fun onServiceResolved(serviceInfo: NsdServiceInfo) {
                 Log.d(
-                    BLINDHMI_CONNECTION_TAG,
+                    CCONN_TAG,
                     "resolution : " + serviceInfo.serviceName + " \n host_from_server: " + serviceInfo.host +
                             "\n port from server: " + serviceInfo.port
                 )
@@ -73,7 +73,7 @@ internal class NSDDiscovery(
     private fun resolveData(serviceInfo: NsdServiceInfo) {
         val address = serviceInfo.host.hostAddress
         val port = serviceInfo.port
-        Log.d(BLINDHMI_CONNECTION_TAG, "$address:$port")
+        Log.d(CCONN_TAG, "$address:$port")
 
         val properties = Properties()
         properties.setProperty("address", address)

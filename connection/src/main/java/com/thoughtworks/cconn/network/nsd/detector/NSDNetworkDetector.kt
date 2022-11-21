@@ -3,15 +3,15 @@
  **
  */
 
-package com.thoughtworks.cconn.detect.nsd.detector
+package com.thoughtworks.cconn.network.nsd.detector
 
 import android.content.Context
 import android.net.nsd.NsdManager
 import com.thoughtworks.cconn.log.DefaultLogger
 import com.thoughtworks.cconn.log.Logger
-import com.thoughtworks.cconn.detect.NetworkDetector
-import com.thoughtworks.cconn.detect.OnFoundService
-import com.thoughtworks.cconn.detect.nsd.definitions.TCP_SERVICE_TYPE
+import com.thoughtworks.cconn.network.NetworkDetector
+import com.thoughtworks.cconn.network.OnFoundService
+import com.thoughtworks.cconn.network.nsd.definitions.TCP_SERVICE_TYPE
 import java.util.*
 
 internal class NSDNetworkDetector(

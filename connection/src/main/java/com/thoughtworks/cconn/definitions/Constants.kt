@@ -6,9 +6,9 @@
 
 package com.thoughtworks.cconn.definitions
 
-const val BLINDHMI_CONNECTION_TAG = "BLINDHMI_CONNECTION"
+const val CCONN_TAG = "CCONN"
 
-const val BLINDHMI_TOPIC_INVALID = "invalid"
+const val CCONN_TOPIC_INVALID = "invalid"
 
 const val PROP_UDP_DETECTOR_BROADCAST_PORT = "broadcast_port"
 const val PROP_UDP_DETECTOR_FLAG = "flag"

@@ -1,4 +1,4 @@
-package com.thoughtworks.cconn.detect.udp.detector
+package com.thoughtworks.cconn.network.udp.detector
 
 import com.thoughtworks.cconn.definitions.PROP_UDP_DETECTOR_BROADCAST_PORT
 import com.thoughtworks.cconn.definitions.PROP_UDP_DETECTOR_FLAG
@@ -6,9 +6,9 @@ import com.thoughtworks.cconn.definitions.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_IP
 import com.thoughtworks.cconn.definitions.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_PORT
 import com.thoughtworks.cconn.log.DefaultLogger
 import com.thoughtworks.cconn.log.Logger
-import com.thoughtworks.cconn.detect.NetworkDetector
-import com.thoughtworks.cconn.detect.OnFoundService
-import com.thoughtworks.cconn.detect.udp.BroadcastMsg
+import com.thoughtworks.cconn.network.NetworkDetector
+import com.thoughtworks.cconn.network.OnFoundService
+import com.thoughtworks.cconn.network.udp.BroadcastMsg
 import com.thoughtworks.cconn.utils.getInt
 import com.thoughtworks.cconn.utils.intToIpv4String
 import java.net.DatagramPacket

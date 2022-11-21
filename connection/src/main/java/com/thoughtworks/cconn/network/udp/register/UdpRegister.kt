@@ -1,18 +1,18 @@
-package com.thoughtworks.cconn.detect.udp.register
+package com.thoughtworks.cconn.network.udp.register
 
 import android.content.Context
-import com.thoughtworks.cconn.log.DefaultLogger
-import com.thoughtworks.cconn.log.Logger
-import com.thoughtworks.cconn.detect.NetworkRegister
-import com.thoughtworks.cconn.detect.udp.BroadcastMsg
-import com.thoughtworks.cconn.utils.getBroadcastAddress
-import com.thoughtworks.cconn.utils.getLocalIpAddress
-import com.thoughtworks.cconn.utils.ipv4StringToInt
 import com.thoughtworks.cconn.definitions.PROP_UDP_REGISTER_BROADCAST_INTERVAL
 import com.thoughtworks.cconn.definitions.PROP_UDP_REGISTER_BROADCAST_PORT
 import com.thoughtworks.cconn.definitions.PROP_UDP_REGISTER_FLAG
 import com.thoughtworks.cconn.definitions.PROP_UDP_REGISTER_SERVER_IP
 import com.thoughtworks.cconn.definitions.PROP_UDP_REGISTER_SERVER_PORT
+import com.thoughtworks.cconn.log.DefaultLogger
+import com.thoughtworks.cconn.log.Logger
+import com.thoughtworks.cconn.network.NetworkRegister
+import com.thoughtworks.cconn.network.udp.BroadcastMsg
+import com.thoughtworks.cconn.utils.getBroadcastAddress
+import com.thoughtworks.cconn.utils.getLocalIpAddress
+import com.thoughtworks.cconn.utils.ipv4StringToInt
 import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -79,7 +79,7 @@ class UdpRegister(private val context: Context) : NetworkRegister {
 
         serverPort = configProps[PROP_UDP_REGISTER_SERVER_PORT]?.toString()?.toInt() ?: 0
 
-        startUdpBroadCast();
+        startUdpBroadCast()
     }
 
     override fun unregister() {

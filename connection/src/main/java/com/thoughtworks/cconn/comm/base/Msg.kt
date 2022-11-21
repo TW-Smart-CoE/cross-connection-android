@@ -35,8 +35,8 @@ internal class MsgHeader(
     var method: Byte = METHOD_REPORT,
     var topicLen: UShort = 0u,
     var dataLen: UShort = 0u,
-    var checkSum: UShort = 0u,
-    var reserved: Int = 0
+    var checkSum: UInt = 0u,
+    var reserved: UShort = 0u
 ) {
     fun fromByteArray(byteArray: ByteArray) {
         if (byteArray.size < MSG_HEADER_LEN) {
@@ -59,11 +59,11 @@ internal class MsgHeader(
         dataLen = byteArray.getShort(index).toUShort()
         index += Short.SIZE_BYTES
 
-        checkSum = byteArray.getShort(index).toUShort()
-        index += Short.SIZE_BYTES
-
-        reserved = byteArray.getInt(index)
+        checkSum = byteArray.getInt(index).toUInt()
         index += Int.SIZE_BYTES
+
+        reserved = byteArray.getShort(index).toUShort()
+        index += Short.SIZE_BYTES
     }
 
     fun toByteArray(dstByteArray: ByteArray?): ByteArray {
@@ -86,11 +86,11 @@ internal class MsgHeader(
         byteArray.putShort(index, dataLen.toShort())
         index += Short.SIZE_BYTES
 
-        byteArray.putShort(index, checkSum.toShort())
-        index += Short.SIZE_BYTES
-
-        byteArray.putInt(index, 0)
+        byteArray.putInt(index, checkSum.toInt())
         index += Int.SIZE_BYTES
+
+        byteArray.putShort(index, 0)
+        index += Short.SIZE_BYTES
 
         return byteArray
     }
@@ -220,7 +220,7 @@ internal fun createMsg(type: Byte, method: Method, topic: String, data: String):
     return createMsg(type, method, topic, MessageConverter.stringToByteArray(data))
 }
 
-internal fun Msg.calcCheckSum(): UShort {
+internal fun Msg.calcCheckSum(): UInt {
     var checkSum: UInt = 0u
 
     val headerCopy = this.header.copyOf()
@@ -240,5 +240,5 @@ internal fun Msg.calcCheckSum(): UShort {
         checkSum += byte.toUByte()
     }
 
-    return checkSum.toUShort()
+    return checkSum
 }

@@ -6,30 +6,30 @@
 package com.thoughtworks.cconn.log
 
 import android.util.Log
-import com.thoughtworks.cconn.definitions.BLINDHMI_CONNECTION_TAG
+import com.thoughtworks.cconn.definitions.CCONN_TAG
 
 internal class DefaultLogger : Logger {
     override fun verbose(message: String) {
-        Log.v(BLINDHMI_CONNECTION_TAG, message)
+        Log.v(CCONN_TAG, message)
     }
 
     override fun debug(message: String) {
-        Log.d(BLINDHMI_CONNECTION_TAG, message)
+        Log.d(CCONN_TAG, message)
     }
 
     override fun info(message: String) {
-        Log.i(BLINDHMI_CONNECTION_TAG, message)
+        Log.i(CCONN_TAG, message)
     }
 
     override fun warn(message: String) {
-        Log.w(BLINDHMI_CONNECTION_TAG, message)
+        Log.w(CCONN_TAG, message)
     }
 
     override fun error(message: String) {
-        Log.e(BLINDHMI_CONNECTION_TAG, message)
+        Log.e(CCONN_TAG, message)
     }
 
     override fun wtf(message: String) {
-        Log.wtf(BLINDHMI_CONNECTION_TAG, message)
+        Log.wtf(CCONN_TAG, message)
     }
 }

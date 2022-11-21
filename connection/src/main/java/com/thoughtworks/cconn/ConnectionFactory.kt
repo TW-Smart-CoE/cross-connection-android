@@ -7,17 +7,17 @@ package com.thoughtworks.cconn
 
 import android.content.Context
 import com.thoughtworks.cconn.bus.Bus
-import com.thoughtworks.cconn.bus.CrossNetworkBus
+import com.thoughtworks.cconn.bus.CrossConnectionBus
 import com.thoughtworks.cconn.comm.bluetooth.client.BluetoothClient
 import com.thoughtworks.cconn.comm.tcp.client.TcpClient
-import com.thoughtworks.cconn.detect.NetworkDetector
-import com.thoughtworks.cconn.detect.NetworkRegister
-import com.thoughtworks.cconn.detect.bluetooth.detector.BluetoothDetector
-import com.thoughtworks.cconn.detect.bluetooth.register.BluetoothRegister
-import com.thoughtworks.cconn.detect.nsd.detector.NSDNetworkDetector
-import com.thoughtworks.cconn.detect.nsd.register.NSDNetworkRegister
-import com.thoughtworks.cconn.detect.udp.detector.UdpDetector
-import com.thoughtworks.cconn.detect.udp.register.UdpRegister
+import com.thoughtworks.cconn.network.NetworkDetector
+import com.thoughtworks.cconn.network.NetworkRegister
+import com.thoughtworks.cconn.network.bluetooth.detector.BluetoothDetector
+import com.thoughtworks.cconn.network.bluetooth.register.BluetoothRegister
+import com.thoughtworks.cconn.network.nsd.detector.NSDNetworkDetector
+import com.thoughtworks.cconn.network.nsd.register.NSDNetworkRegister
+import com.thoughtworks.cconn.network.udp.detector.UdpDetector
+import com.thoughtworks.cconn.network.udp.register.UdpRegister
 
 /**
  * Connection type
@@ -85,6 +85,6 @@ object ConnectionFactory {
         }
 
     fun createBus(context: Context): Bus {
-        return CrossNetworkBus(context)
+        return CrossConnectionBus(context)
     }
 }

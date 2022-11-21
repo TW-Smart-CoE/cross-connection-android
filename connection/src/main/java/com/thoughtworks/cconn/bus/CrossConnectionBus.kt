@@ -14,10 +14,10 @@ import com.thoughtworks.cconn.comm.tcp.server.TcpServer
 import java.util.*
 
 
-internal class CrossNetworkBus(private val context: Context) : Bus {
+internal class CrossConnectionBus(private val context: Context) : Bus {
     private val serverMap = mutableMapOf<ConnectionType, ServerStruct>()
 
-    private var handlerThread = HandlerThread(HETEROGENEOUS_NETWORK_BUS_HANDLER_THREAD_NAME)
+    private var handlerThread = HandlerThread(CROSS_CONNECTION_BUS_HANDLER_THREAD_NAME)
     private lateinit var messageHandler: Handler
     private var initialized = false
 
@@ -116,8 +116,8 @@ internal class CrossNetworkBus(private val context: Context) : Bus {
     private data class MessageObjPublish(val msg: Msg, val excludeServer: Server)
 
     companion object {
-        private const val HETEROGENEOUS_NETWORK_BUS_HANDLER_THREAD_NAME =
-            "HeterogeneousNetworkBusHandlerThread"
+        private const val CROSS_CONNECTION_BUS_HANDLER_THREAD_NAME =
+            "CrossConnectionBusHandlerThread"
 
         private const val MSG_PUBLISH = 3
     }

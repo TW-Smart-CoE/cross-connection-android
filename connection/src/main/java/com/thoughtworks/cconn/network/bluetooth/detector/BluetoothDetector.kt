@@ -3,7 +3,7 @@
  **
  */
 
-package com.thoughtworks.cconn.detect.bluetooth.detector
+package com.thoughtworks.cconn.network.bluetooth.detector
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
@@ -14,8 +14,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import com.thoughtworks.cconn.log.DefaultLogger
 import com.thoughtworks.cconn.log.Logger
-import com.thoughtworks.cconn.detect.NetworkDetector
-import com.thoughtworks.cconn.detect.OnFoundService
+import com.thoughtworks.cconn.network.NetworkDetector
+import com.thoughtworks.cconn.network.OnFoundService
 import java.util.*
 
 internal class BluetoothDetector(private val context: Context) : NetworkDetector {

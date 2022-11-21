@@ -3,16 +3,16 @@
  **
  */
 
-package com.thoughtworks.cconn.detect.nsd.register
+package com.thoughtworks.cconn.network.nsd.register
 
 import android.content.Context
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import com.thoughtworks.cconn.log.DefaultLogger
 import com.thoughtworks.cconn.log.Logger
-import com.thoughtworks.cconn.detect.NetworkRegister
-import com.thoughtworks.cconn.detect.nsd.definitions.SERVICE_INFO_ATTRIBUTE_DEVICE
-import com.thoughtworks.cconn.detect.nsd.definitions.WIFI_INTERFACE_NAME
+import com.thoughtworks.cconn.network.NetworkRegister
+import com.thoughtworks.cconn.network.nsd.definitions.SERVICE_INFO_ATTRIBUTE_DEVICE
+import com.thoughtworks.cconn.network.nsd.definitions.WIFI_INTERFACE_NAME
 import java.net.NetworkInterface
 import java.util.*
 

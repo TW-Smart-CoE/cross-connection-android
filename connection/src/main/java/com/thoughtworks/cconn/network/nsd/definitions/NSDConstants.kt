@@ -3,7 +3,7 @@
  **
  */
 
-package com.thoughtworks.cconn.detect.nsd.definitions
+package com.thoughtworks.cconn.network.nsd.definitions
 
 internal const val CENTER_MQTT_SERVICE_TYPE = "_mqtt._tcp."
 internal const val CENTER_MQTT_SERVICE_NAME = "blindhmi_mqtt_broker"

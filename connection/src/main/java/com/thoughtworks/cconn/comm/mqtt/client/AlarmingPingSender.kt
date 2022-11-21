@@ -80,7 +80,7 @@ internal class AlarmPingSender(private val context: Context) :
     }
 
     companion object {
-        private const val ALARM_ACTION = "com.thoughtworks.blindhmi.connection.protocols.mqtt.client.AlarmPingSender"
+        private const val ALARM_ACTION = "com.thoughtworks.cconn.protocols.mqtt.client.AlarmPingSender"
     }
 }
 

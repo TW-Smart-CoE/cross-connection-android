@@ -3,14 +3,14 @@
  **
  */
 
-package com.thoughtworks.cconn.detect.bluetooth.register
+package com.thoughtworks.cconn.network.bluetooth.register
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import com.thoughtworks.cconn.log.DefaultLogger
 import com.thoughtworks.cconn.log.Logger
-import com.thoughtworks.cconn.detect.NetworkRegister
+import com.thoughtworks.cconn.network.NetworkRegister
 import java.util.*
 
 internal class BluetoothRegister(private val context: Context) : NetworkRegister {

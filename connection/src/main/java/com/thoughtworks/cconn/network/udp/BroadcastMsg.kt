@@ -1,4 +1,4 @@
-package com.thoughtworks.cconn.detect.udp
+package com.thoughtworks.cconn.network.udp
 
 import com.thoughtworks.cconn.utils.getInt
 import com.thoughtworks.cconn.utils.getShort

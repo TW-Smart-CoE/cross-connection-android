@@ -3,7 +3,7 @@
  **
  */
 
-package com.thoughtworks.cconn.detect
+package com.thoughtworks.cconn.network
 
 import com.thoughtworks.cconn.Module
 import java.util.*
