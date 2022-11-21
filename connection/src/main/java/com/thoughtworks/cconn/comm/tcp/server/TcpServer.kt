@@ -123,7 +123,7 @@ internal class TcpServer(private val context: Context) : Server {
         const val PROPERTY_PORT = "port"
 
         const val PROPERTY_PORT_DEFAULT = 8884
-        const val CORE_CONNECTION_COUNT = 5
+        const val CORE_CONNECTION_COUNT = 10
         const val TCP_STATE_CHECK_TIME = 16
         const val SECOND_TO_MILLISECOND = 1000L
     }
