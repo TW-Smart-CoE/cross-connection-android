@@ -13,7 +13,7 @@ import com.thoughtworks.cconn.utils.getInt
 import com.thoughtworks.cconn.utils.intToIpv4String
 import java.net.DatagramPacket
 import java.net.DatagramSocket
-import java.net.InetAddress
+import java.net.InetSocketAddress
 import java.net.SocketException
 import java.util.*
 
@@ -31,7 +31,9 @@ class UdpDetector : NetworkDetector {
         flag = configProps[PROP_UDP_DETECTOR_FLAG]?.toString()?.toInt()
             ?: DEFAULT_BROADCAST_FLAG
 
-        datagramSocket = DatagramSocket(broadcastPort, InetAddress.getByName(ANY_ADDRESS))
+        datagramSocket = DatagramSocket(null)
+        datagramSocket?.reuseAddress = true
+        datagramSocket?.bind(InetSocketAddress(ANY_ADDRESS, broadcastPort))
         datagramSocket?.broadcast = true
         isKeepReceiving = true
 
