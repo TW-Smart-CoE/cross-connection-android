@@ -8,7 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import com.thoughtworks.cconnapp.ui.navigation.Navigation
-import com.thoughtworks.cconnapp.ui.theme.CrossconnectionandroidTheme
+import com.thoughtworks.cconnapp.ui.theme.CrossConnectionTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CrossconnectionandroidTheme {
+            CrossConnectionTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
