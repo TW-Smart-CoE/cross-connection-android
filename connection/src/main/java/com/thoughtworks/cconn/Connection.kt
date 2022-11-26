@@ -46,22 +46,22 @@ enum class ConnectionState {
     /**
      * Connecting
      */
-    Connecting,
+    CONNECTING,
 
     /**
      * Connected
      */
-    Connected,
+    CONNECTED,
 
     /**
      * Disconnected
      */
-    Disconnected,
+    DISCONNECTED,
 
     /**
      * Reconnecting
      */
-    Reconnecting,
+    RECONNECTING,
 }
 
 /**

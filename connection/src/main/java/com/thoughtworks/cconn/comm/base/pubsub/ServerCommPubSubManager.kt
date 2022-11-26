@@ -6,7 +6,7 @@ import com.thoughtworks.cconn.comm.base.Msg
 import com.thoughtworks.cconn.comm.base.MsgType
 import com.thoughtworks.cconn.comm.base.byteToMsgType
 import com.thoughtworks.cconn.log.Logger
-import com.thoughtworks.cconn.utils.MessageConverter
+import com.thoughtworks.cconn.utils.DataConverter
 import java.util.concurrent.CopyOnWriteArrayList
 
 internal class ServerCommPubSubManager(private var logger: Logger) {
@@ -47,7 +47,7 @@ internal class ServerCommPubSubManager(private var logger: Logger) {
     }
 
     fun handlePublishMsgSelf(msg: Msg) {
-        val fullTopic = MessageConverter.byteArrayToString(msg.topic)
+        val fullTopic = DataConverter.byteArrayToString(msg.topic)
 
         commServerWrapperList.forEach {
             if (it.isSubscribed(fullTopic)) {
@@ -64,7 +64,7 @@ internal class ServerCommPubSubManager(private var logger: Logger) {
     }
 
     private fun handleSubscribe(commServerWrapper: CommServerWrapper, msg: Msg) {
-        val fullTopic = MessageConverter.byteArrayToString(msg.topic)
+        val fullTopic = DataConverter.byteArrayToString(msg.topic)
         // subscribe topic self
         commServerWrapper.subscribe(fullTopic)
 
@@ -73,7 +73,7 @@ internal class ServerCommPubSubManager(private var logger: Logger) {
     }
 
     private fun handleUnsubscribe(commServerWrapper: CommServerWrapper, msg: Msg) {
-        val fullTopic = MessageConverter.byteArrayToString(msg.topic)
+        val fullTopic = DataConverter.byteArrayToString(msg.topic)
         // unsubscribe topic self
         commServerWrapper.unsubscribe(fullTopic)
 

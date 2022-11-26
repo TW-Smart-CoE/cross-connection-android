@@ -32,7 +32,7 @@ internal class CommHandler(
     override fun run() {
         if (isClient) {
             try {
-                onConnectionStateChangeListener?.onConnectionStateChanged(ConnectionState.Connecting)
+                onConnectionStateChangeListener?.onConnectionStateChanged(ConnectionState.CONNECTING)
                 comm.connect()
             } catch (e: IOException) {
                 logger.error("Connect failed: ${e.message}")
@@ -50,7 +50,7 @@ internal class CommHandler(
             return
         }
 
-        onConnectionStateChangeListener?.onConnectionStateChanged(ConnectionState.Connected)
+        onConnectionStateChangeListener?.onConnectionStateChanged(ConnectionState.CONNECTED)
 
         isClose = false
         while (!isClose) {
@@ -90,11 +90,11 @@ internal class CommHandler(
 
         try {
             comm.close()
-            onConnectionStateChangeListener?.onConnectionStateChanged(ConnectionState.Disconnected)
+            onConnectionStateChangeListener?.onConnectionStateChanged(ConnectionState.DISCONNECTED)
         } catch (e: IOException) {
             logger.error("Could not close the connection: ${e.message}")
             onConnectionStateChangeListener?.onConnectionStateChanged(
-                ConnectionState.Disconnected,
+                ConnectionState.DISCONNECTED,
                 e
             )
         } finally {

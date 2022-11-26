@@ -1,7 +1,7 @@
 package com.thoughtworks.cconn.comm.base
 
 import com.thoughtworks.cconn.Method
-import com.thoughtworks.cconn.utils.MessageConverter
+import com.thoughtworks.cconn.utils.DataConverter
 import com.thoughtworks.cconn.utils.getByte
 import com.thoughtworks.cconn.utils.getInt
 import com.thoughtworks.cconn.utils.getShort
@@ -205,7 +205,7 @@ internal fun byteToMsgType(msgType: Byte): MsgType {
 }
 
 internal fun createMsg(type: Byte, method: Method, topic: String, data: ByteArray): Msg {
-    val topicBytes = MessageConverter.stringToByteArray(topic)
+    val topicBytes = DataConverter.stringToByteArray(topic)
 
     val header = MsgHeader()
     header.type = type
@@ -217,7 +217,7 @@ internal fun createMsg(type: Byte, method: Method, topic: String, data: ByteArra
 }
 
 internal fun createMsg(type: Byte, method: Method, topic: String, data: String): Msg {
-    return createMsg(type, method, topic, MessageConverter.stringToByteArray(data))
+    return createMsg(type, method, topic, DataConverter.stringToByteArray(data))
 }
 
 internal fun Msg.calcCheckSum(): UInt {

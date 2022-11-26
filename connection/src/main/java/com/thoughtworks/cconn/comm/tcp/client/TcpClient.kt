@@ -30,7 +30,7 @@ import com.thoughtworks.cconn.comm.tcp.TcpComm
 import com.thoughtworks.cconn.comm.thread.AndroidHandlerThread
 import com.thoughtworks.cconn.log.DefaultLogger
 import com.thoughtworks.cconn.log.Logger
-import com.thoughtworks.cconn.utils.MessageConverter
+import com.thoughtworks.cconn.utils.DataConverter
 import com.thoughtworks.cconn.utils.toBoolean
 import java.io.IOException
 import java.net.Socket
@@ -48,7 +48,7 @@ internal class TcpClient(private val context: Context) : Connection {
     private var currentReconnectRetryTime = minReconnectRetryTime
 
     private var isInit = false
-    private var connectionState: ConnectionState = ConnectionState.Disconnected
+    private var connectionState: ConnectionState = ConnectionState.DISCONNECTED
     private val executor = Executors.newSingleThreadExecutor()
     private val onConnectionStateChangedListenerList =
         CopyOnWriteArrayList<OnConnectionStateChangeListener>()
@@ -105,7 +105,7 @@ internal class TcpClient(private val context: Context) : Connection {
 
         thread.execute {
             val fullTopic = TopicMapper.toFullTopic(topic, method)
-            val fullTopicBytes = MessageConverter.stringToByteArray(fullTopic)
+            val fullTopicBytes = DataConverter.stringToByteArray(fullTopic)
             try {
                 commHandler?.send(
                     Msg(
@@ -142,7 +142,7 @@ internal class TcpClient(private val context: Context) : Connection {
 
         thread.execute {
             val fullTopic = TopicMapper.toFullTopic(topic, method)
-            val fullTopicBytes = MessageConverter.stringToByteArray(fullTopic)
+            val fullTopicBytes = DataConverter.stringToByteArray(fullTopic)
             try {
                 commHandler?.send(
                     Msg(
@@ -171,7 +171,7 @@ internal class TcpClient(private val context: Context) : Connection {
 
         thread.execute {
             val fullTopic = TopicMapper.toFullTopic(topic, method)
-            val fullTopicBytes = MessageConverter.stringToByteArray(fullTopic)
+            val fullTopicBytes = DataConverter.stringToByteArray(fullTopic)
             try {
                 commHandler?.send(
                     Msg(
@@ -244,7 +244,7 @@ internal class TcpClient(private val context: Context) : Connection {
 
     private fun scheduleReconnect() {
         thread.execute {
-            changeConnectionState(ConnectionState.Reconnecting)
+            changeConnectionState(ConnectionState.RECONNECTING)
             logger.info("schedule tcp reconnect attempt in $currentReconnectRetryTime seconds.")
 
             SystemClock.sleep(currentReconnectRetryTime * SECOND_TO_MILLISECOND)
@@ -261,14 +261,14 @@ internal class TcpClient(private val context: Context) : Connection {
         }
 
         subscribeManager.invokeMatchedCallback(
-            MessageConverter.byteArrayToString(msg.topic),
+            DataConverter.byteArrayToString(msg.topic),
             msg.data
         )
     }
 
     private fun changeConnectionState(state: ConnectionState, throwable: Throwable? = null) {
         this.connectionState = state
-        if (connectionState == ConnectionState.Connected) {
+        if (connectionState == ConnectionState.CONNECTED) {
             currentReconnectRetryTime = minReconnectRetryTime
         }
 

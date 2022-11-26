@@ -1,11 +1,7 @@
 package com.thoughtworks.cconn.network.udp.register
 
 import android.content.Context
-import com.thoughtworks.cconn.definitions.PROP_UDP_REGISTER_BROADCAST_INTERVAL
-import com.thoughtworks.cconn.definitions.PROP_UDP_REGISTER_BROADCAST_PORT
-import com.thoughtworks.cconn.definitions.PROP_UDP_REGISTER_FLAG
-import com.thoughtworks.cconn.definitions.PROP_UDP_REGISTER_SERVER_IP
-import com.thoughtworks.cconn.definitions.PROP_UDP_REGISTER_SERVER_PORT
+import com.thoughtworks.cconn.definitions.PropKeys
 import com.thoughtworks.cconn.log.DefaultLogger
 import com.thoughtworks.cconn.log.Logger
 import com.thoughtworks.cconn.network.NetworkRegister
@@ -65,19 +61,19 @@ class UdpRegister(private val context: Context) : NetworkRegister {
     }
 
     override fun register(configProps: Properties) {
-        broadcastPort = configProps[PROP_UDP_REGISTER_BROADCAST_PORT]?.toString()?.toInt()
+        broadcastPort = configProps[PropKeys.PROP_UDP_REGISTER_BROADCAST_PORT]?.toString()?.toInt()
             ?: DEFAULT_BROADCAST_PORT
-        broadcastInterval = configProps[PROP_UDP_REGISTER_BROADCAST_INTERVAL]?.toString()?.toInt()
+        broadcastInterval = configProps[PropKeys.PROP_UDP_REGISTER_BROADCAST_INTERVAL]?.toString()?.toInt()
             ?: DEFAULT_BROADCAST_INTERVAL
 
-        flag = configProps[PROP_UDP_REGISTER_FLAG]?.toString()?.toInt() ?: DEFAULT_BROADCAST_FLAG
+        flag = configProps[PropKeys.PROP_UDP_REGISTER_FLAG]?.toString()?.toInt() ?: DEFAULT_BROADCAST_FLAG
 
-        val strIp = (configProps[PROP_UDP_REGISTER_SERVER_IP] ?: getLocalIpAddress()) as String?
+        val strIp = (configProps[PropKeys.PROP_UDP_REGISTER_SERVER_IP] ?: getLocalIpAddress()) as String?
         strIp?.let {
             serverIp = ipv4StringToInt(it)
         }
 
-        serverPort = configProps[PROP_UDP_REGISTER_SERVER_PORT]?.toString()?.toInt() ?: 0
+        serverPort = configProps[PropKeys.PROP_UDP_REGISTER_SERVER_PORT]?.toString()?.toInt() ?: 0
 
         startUdpBroadCast()
     }

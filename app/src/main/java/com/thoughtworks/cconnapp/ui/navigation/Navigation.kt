@@ -16,10 +16,10 @@ fun Navigation() {
             MainScreen(navController = navController)
         }
         composable(route = Screen.BusScreen.route) {
-            BusScreen()
+            BusScreen(navController = navController)
         }
         composable(route = Screen.ClientScreen.route) {
-            ClientScreen()
+            ClientScreen(navController = navController)
         }
     }
 }

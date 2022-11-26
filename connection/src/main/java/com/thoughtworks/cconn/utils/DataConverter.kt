@@ -6,9 +6,9 @@
 package com.thoughtworks.cconn.utils
 
 /**
- * Message converter
+ * Data converter
  */
-object MessageConverter {
+object DataConverter {
     /**
      * String to byte array
      *

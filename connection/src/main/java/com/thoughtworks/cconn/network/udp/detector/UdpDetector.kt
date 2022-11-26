@@ -1,9 +1,6 @@
 package com.thoughtworks.cconn.network.udp.detector
 
-import com.thoughtworks.cconn.definitions.PROP_UDP_DETECTOR_BROADCAST_PORT
-import com.thoughtworks.cconn.definitions.PROP_UDP_DETECTOR_FLAG
-import com.thoughtworks.cconn.definitions.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_IP
-import com.thoughtworks.cconn.definitions.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_PORT
+import com.thoughtworks.cconn.definitions.PropKeys
 import com.thoughtworks.cconn.log.DefaultLogger
 import com.thoughtworks.cconn.log.Logger
 import com.thoughtworks.cconn.network.NetworkDetector
@@ -26,9 +23,9 @@ class UdpDetector : NetworkDetector {
     private var flag: Int = 0
 
     override fun startDiscover(configProps: Properties, onFoundService: OnFoundService) {
-        broadcastPort = configProps[PROP_UDP_DETECTOR_BROADCAST_PORT]?.toString()?.toInt()
+        broadcastPort = configProps[PropKeys.PROP_UDP_DETECTOR_BROADCAST_PORT]?.toString()?.toInt()
             ?: DEFAULT_BROADCAST_PORT
-        flag = configProps[PROP_UDP_DETECTOR_FLAG]?.toString()?.toInt()
+        flag = configProps[PropKeys.PROP_UDP_DETECTOR_FLAG]?.toString()?.toInt()
             ?: DEFAULT_BROADCAST_FLAG
 
         datagramSocket = DatagramSocket(null)
@@ -55,8 +52,10 @@ class UdpDetector : NetworkDetector {
                                 broadcastMsg.fromByteArray(buf)
 
                                 val properties = Properties()
-                                properties[PROP_UDP_DETECTOR_ON_FOUND_SERVICE_IP] = intToIpv4String(broadcastMsg.ip)
-                                properties[PROP_UDP_DETECTOR_ON_FOUND_SERVICE_PORT] = broadcastMsg.port
+                                properties[PropKeys.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_IP] =
+                                    intToIpv4String(broadcastMsg.ip)
+                                properties[PropKeys.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_PORT] =
+                                    broadcastMsg.port
 
                                 onFoundService.invoke(properties)
                             }
@@ -85,7 +84,6 @@ class UdpDetector : NetworkDetector {
     companion object {
         private const val ANY_ADDRESS = "0.0.0.0"
         private const val DEFAULT_BROADCAST_PORT = 12000
-        private const val DEFAULT_BROADCAST_INTERVAL = 10000
         private const val DEFAULT_BROADCAST_FLAG = 0xFFFEC1E5.toInt()
         private const val BROADCAST_MSG_HEADER_LEN = 12
         private const val RECV_BUF_LEN = 32

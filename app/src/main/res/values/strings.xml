@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">cross-connection</string>
+    <string name="app_name">Cross Connection</string>
     <string name="client">client</string>
     <string name="bus">bus</string>
+    <string name="connecting">connecting</string>
+    <string name="connected">connected</string>
+    <string name="reconnecting">reconnecting</string>
+    <string name="disconnected">disconnected</string>
 </resources>
