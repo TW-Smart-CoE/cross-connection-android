@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">cross-connection-android</string>
+    <string name="app_name">cross-connection</string>
+    <string name="client">client</string>
+    <string name="bus">bus</string>
 </resources>
