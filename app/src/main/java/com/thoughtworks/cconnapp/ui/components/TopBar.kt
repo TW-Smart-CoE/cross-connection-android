@@ -19,7 +19,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -43,7 +42,7 @@ fun TopBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.Yellow)
+            .background(color = colorResource(id = R.color.purple_700))
     ) {
         Column(
             modifier = modifier
@@ -53,9 +52,10 @@ fun TopBar(
         ) {
             Text(
                 title,
-                fontSize = 18.sp,
+                fontSize = 22.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
+                color = colorResource(id = R.color.white)
             )
             Spacer(
                 modifier = Modifier
@@ -80,13 +80,21 @@ fun TopBar(
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(
                     text = connectionStateText(LocalContext.current, connState),
-                    color = colorResource(id = android.R.color.darker_gray)
+                    color = colorResource(id = R.color.white)
                 )
             }
         }
         leftButton?.let { button ->
-            val context = LocalContext.current
-            ShowLeftButton(context, button)
+            Image(
+                painter = painterResource(id = button.iconId),
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .clickable {
+                        button.action.invoke()
+                    }
+                    .align(alignment = Alignment.CenterStart)
+            )
         }
         rightButton?.let { button ->
             ClickableText(
@@ -108,34 +116,6 @@ fun TopBar(
                 }
             )
         }
-    }
-}
-
-@Composable
-fun ShowLeftButton(context: Context, button: LeftButton) {
-    when (context.resources.getResourceTypeName(button.iconId)) {
-        "string" -> ClickableText(
-            text = AnnotatedString(
-                text = stringResource(id = button.iconId),
-                spanStyle = SpanStyle(
-                    color = colorResource(id = R.color.purple_500),
-                    fontSize = 18.sp
-                )
-            ),
-            modifier = Modifier
-                .padding(10.dp, 0.dp),
-            onClick = {
-                button.action.invoke()
-            }
-        )
-        else -> Image(
-            painter = painterResource(id = button.iconId),
-            contentDescription = "",
-            modifier = Modifier
-                .clickable {
-                    button.action.invoke()
-                }
-        )
     }
 }
 
