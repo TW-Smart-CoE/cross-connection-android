@@ -22,6 +22,8 @@ import javax.inject.Inject
 
 data class ClientUiState(
     val connectionState: ConnectionState = ConnectionState.DISCONNECTED,
+    val detectFlag: String = "FFFEC1E5",
+    val isDetecting: Boolean = false,
 )
 
 @HiltViewModel
@@ -54,11 +56,22 @@ class ClientViewModel @Inject constructor(
     }
 
     fun detectAndConnect() {
-        detector.startDiscover(Properties()) {
-            val serverIp = it[PropKeys.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_IP]?.toString() ?: ""
-            val serverPort = it[PropKeys.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_PORT]?.toString() ?: "0"
+        _clientUiState.update {
+            it.copy(isDetecting = true)
+        }
+
+        detector.startDiscover(Properties()) { props ->
+            val serverIp = props[PropKeys.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_IP]?.toString() ?: ""
+            val serverPort =
+                props[PropKeys.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_PORT]?.toString() ?: "0"
             detector.stopDiscover()
+            _clientUiState.update {
+                it.copy(isDetecting = false)
+            }
+
             connection.init(Properties().apply {
+                this[PropKeys.PROP_UDP_DETECTOR_FLAG] =
+                    Integer.parseUnsignedInt(_clientUiState.value.detectFlag, FLAG_RADIX)
                 this[PropKeys.PROP_IP] = serverIp
                 this[PropKeys.PROP_PORT] = serverPort
                 this[PropKeys.PROP_AUTO_CONNECT] = true
@@ -87,8 +100,19 @@ class ClientViewModel @Inject constructor(
         }
     }
 
+    fun updateFlag(s: String) {
+        _clientUiState.update {
+            it.copy(detectFlag = s)
+        }
+    }
+
+    fun close() {
+        connection.close()
+    }
+
     companion object {
         private const val TAG = "ClientViewModel"
         private const val MAX_RECONNECT_RETRY_TIME = 8
+        private const val FLAG_RADIX = 16
     }
 }

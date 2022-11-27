@@ -63,7 +63,7 @@ internal class BluetoothClient(private val context: Context) : Connection {
     private lateinit var commHandler: CommHandler
     private var logger: Logger = DefaultLogger()
     private val subscribeManager = ClientCommPubSubManager(logger)
-    private val executor = Executors.newSingleThreadExecutor()
+    private val executor = Executors.newCachedThreadPool()
 
     private val thread = AndroidHandlerThread("bluetooth client thread")
 

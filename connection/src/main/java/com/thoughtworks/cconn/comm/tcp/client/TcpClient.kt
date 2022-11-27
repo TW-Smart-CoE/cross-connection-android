@@ -49,7 +49,7 @@ internal class TcpClient(private val context: Context) : Connection {
 
     private var isInit = false
     private var connectionState: ConnectionState = ConnectionState.DISCONNECTED
-    private val executor = Executors.newSingleThreadExecutor()
+    private val executor = Executors.newCachedThreadPool()
     private val onConnectionStateChangedListenerList =
         CopyOnWriteArrayList<OnConnectionStateChangeListener>()
 

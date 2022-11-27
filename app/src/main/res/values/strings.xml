@@ -6,4 +6,8 @@
     <string name="connected">connected</string>
     <string name="reconnecting">reconnecting</string>
     <string name="disconnected">disconnected</string>
+    <string name="detect_flag">detect flag</string>
+    <string name="init">init</string>
+    <string name="detect_and_connect">detect and connect</string>
+    <string name="close">close</string>
 </resources>
