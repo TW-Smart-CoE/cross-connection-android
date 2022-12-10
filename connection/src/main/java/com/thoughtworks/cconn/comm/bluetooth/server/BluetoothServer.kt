@@ -17,6 +17,8 @@ import com.thoughtworks.cconn.comm.base.CommServerWrapper
 import com.thoughtworks.cconn.comm.base.Msg
 import com.thoughtworks.cconn.comm.base.pubsub.ServerCommPubSubManager
 import com.thoughtworks.cconn.comm.bluetooth.BluetoothComm
+import com.thoughtworks.cconn.definitions.Constants
+import com.thoughtworks.cconn.definitions.PropKeys
 import com.thoughtworks.cconn.log.DefaultLogger
 import com.thoughtworks.cconn.log.Logger
 import java.io.IOException
@@ -25,20 +27,14 @@ import java.util.concurrent.Executors
 
 internal class BluetoothServer(private val context: Context) : Server {
     private var logger: Logger = DefaultLogger()
-
     private lateinit var bluetoothAdapter: BluetoothAdapter
-
     private val executor = Executors.newScheduledThreadPool(CORE_CONNECTION_COUNT)
-
     private var isKeepListening = false
-
     private var serverSocket: BluetoothServerSocket? = null
-
     private val serverPubSubManager = ServerCommPubSubManager(getLogger())
-
     private var name = BLUETOOTH_SERVER_NAME
-
     private var uuid = UUID.fromString(SPP_UUID)
+    private var recvBufferSize = Constants.DEFAULT_BUFFER_SIZE
 
     override fun start(configProps: Properties): Boolean {
         val bluetoothManager =
@@ -49,13 +45,17 @@ internal class BluetoothServer(private val context: Context) : Server {
             stop()
         }
 
-        configProps.getProperty(PROPERTY_NAME)?.let {
+        configProps.getProperty(PropKeys.PROP_NAME)?.let {
             name = it
         }
 
-        configProps.getProperty(PROPERTY_UUID)?.let {
+        configProps.getProperty(PropKeys.PROP_UUID)?.let {
             uuid = UUID.fromString(it)
         }
+
+        recvBufferSize =
+            configProps[PropKeys.PROP_RECV_BUFFER_SIZE]?.toString()?.toInt()
+                ?: Constants.DEFAULT_BUFFER_SIZE
 
         serverSocket = createServerSocket()
         if (serverSocket == null) {
@@ -87,7 +87,8 @@ internal class BluetoothServer(private val context: Context) : Server {
                             CommHandler(
                                 false,
                                 BluetoothComm(clientSocket),
-                                logger
+                                logger,
+                                recvBufferSize = recvBufferSize
                             )
                         ).apply {
                             commHandler.onCommCloseListener = { _, _ ->
@@ -173,11 +174,9 @@ internal class BluetoothServer(private val context: Context) : Server {
     }
 
     companion object {
-        const val BLUETOOTH_SERVER_NAME = "BLINDHMI_BLUETOOTH_SERVER"
+        const val BLUETOOTH_SERVER_NAME = "CCONN_BLUETOOTH_SERVER"
         const val SPP_UUID = "00001101-0000-1000-8000-00805F9B34FB"
         const val CORE_CONNECTION_COUNT = 5
-        const val PROPERTY_NAME = "name"
-        const val PROPERTY_UUID = "uuid"
         const val BLUETOOTH_STATE_CHECK_TIME = 16
         const val SECOND_TO_MILLISECOND = 1000L
     }

@@ -34,6 +34,8 @@ import com.thoughtworks.cconn.comm.base.pubsub.Subscription
 import com.thoughtworks.cconn.comm.bluetooth.BluetoothComm
 import com.thoughtworks.cconn.comm.bluetooth.server.BluetoothServer
 import com.thoughtworks.cconn.comm.thread.AndroidHandlerThread
+import com.thoughtworks.cconn.definitions.Constants
+import com.thoughtworks.cconn.definitions.PropKeys
 import com.thoughtworks.cconn.log.DefaultLogger
 import com.thoughtworks.cconn.log.Logger
 import com.thoughtworks.cconn.utils.DataConverter
@@ -51,6 +53,7 @@ internal class BluetoothClient(private val context: Context) : Connection {
     private val minReconnectRetryTime = 4
     private var maxReconnectRetryTime = 32
     private var currentReconnectRetryTime = minReconnectRetryTime
+    private var recvBufferSize = Constants.DEFAULT_BUFFER_SIZE
 
     private var isInit = false
     private var connectionState: ConnectionState = ConnectionState.DISCONNECTED
@@ -67,7 +70,7 @@ internal class BluetoothClient(private val context: Context) : Connection {
 
     private val thread = AndroidHandlerThread("bluetooth client thread")
 
-    override fun init(configProps: Properties) {
+    override fun start(configProps: Properties) {
         val bluetoothManager =
             context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         bluetoothAdapter = bluetoothManager.adapter
@@ -78,7 +81,7 @@ internal class BluetoothClient(private val context: Context) : Connection {
         }
 
         bluetoothDevice = try {
-            address = configProps.getProperty(PROPERTY_ADDRESS)
+            address = configProps.getProperty(PropKeys.PROP_ADDRESS)
             bluetoothAdapter.getRemoteDevice(address)
         } catch (t: Throwable) {
             logger.error("bluetooth getRemoteDevice failed: ${t.message}")
@@ -86,19 +89,23 @@ internal class BluetoothClient(private val context: Context) : Connection {
         }
 
         uuid = BluetoothServer.SPP_UUID
-        configProps.getProperty(PROPERTY_UUID)?.let {
+        configProps.getProperty(PropKeys.PROP_UUID)?.let {
             uuid = it
         }
 
-        configProps.getProperty(PROPERTY_AUTO_RECONNECT)?.let {
+        configProps.getProperty(PropKeys.PROP_AUTO_RECONNECT)?.let {
             autoReconnect = it.toBoolean()
         }
 
-        configProps.getProperty(PROPERTY_MAX_RECONNECT_RETRY_TIME)?.let {
+        configProps.getProperty(PropKeys.PROP_MAX_RECONNECT_RETRY_TIME)?.let {
             maxReconnectRetryTime = it.toInt()
             if (maxReconnectRetryTime < minReconnectRetryTime) {
                 maxReconnectRetryTime = minReconnectRetryTime
             }
+        }
+
+        configProps.getProperty(PropKeys.PROP_RECV_BUFFER_SIZE)?.let {
+            recvBufferSize = it.toInt()
         }
 
         currentReconnectRetryTime = minReconnectRetryTime
@@ -255,7 +262,8 @@ internal class BluetoothClient(private val context: Context) : Connection {
                 CommHandler(
                     true,
                     BluetoothComm(bluetoothSocket),
-                    logger
+                    logger,
+                    recvBufferSize = recvBufferSize,
                 ).apply {
                     onCommCloseListener = { _, isPassive ->
                         if (isPassive && autoReconnect) {
@@ -341,10 +349,6 @@ internal class BluetoothClient(private val context: Context) : Connection {
     }
 
     companion object {
-        const val PROPERTY_ADDRESS = "address"
-        const val PROPERTY_UUID = "uuid"
-        const val PROPERTY_AUTO_RECONNECT = "auto_reconnect"
-        const val PROPERTY_MAX_RECONNECT_RETRY_TIME = "max_reconnect_retry_time"
         const val SECOND_TO_MILLISECOND = 1000L
     }
 }

@@ -28,6 +28,8 @@ import com.thoughtworks.cconn.comm.base.pubsub.ClientCommPubSubManager
 import com.thoughtworks.cconn.comm.base.pubsub.Subscription
 import com.thoughtworks.cconn.comm.tcp.TcpComm
 import com.thoughtworks.cconn.comm.thread.AndroidHandlerThread
+import com.thoughtworks.cconn.definitions.Constants
+import com.thoughtworks.cconn.definitions.PropKeys
 import com.thoughtworks.cconn.log.DefaultLogger
 import com.thoughtworks.cconn.log.Logger
 import com.thoughtworks.cconn.utils.DataConverter
@@ -41,11 +43,12 @@ import kotlin.math.min
 
 internal class TcpClient(private val context: Context) : Connection {
     private var address = ""
-    private var port = PROPERTY_PORT_DEFAULT
+    private var port = DEFAULT_PORT
     private var autoReconnect = false
-    private var minReconnectRetryTime = PROPERTY_MIN_RECONNECT_RETRY_TIME_DEFAULT
-    private var maxReconnectRetryTime = PROPERTY_MAX_RECONNECT_RETRY_TIME_DEFAULT
+    private var minReconnectRetryTime: Int = MIN_RECONNECT_RETRY_TIME_DEFAULT
+    private var maxReconnectRetryTime: Int = MAX_RECONNECT_RETRY_TIME_DEFAULT
     private var currentReconnectRetryTime = minReconnectRetryTime
+    private var recvBufferSize = Constants.DEFAULT_BUFFER_SIZE
 
     private var isInit = false
     private var connectionState: ConnectionState = ConnectionState.DISCONNECTED
@@ -61,16 +64,20 @@ internal class TcpClient(private val context: Context) : Connection {
 
     private val thread = AndroidHandlerThread("tcp client thread")
 
-    override fun init(configProps: Properties) {
-        address = configProps[PROPERTY_IP]?.toString() ?: ""
-        port = configProps[PROPERTY_PORT]?.toString()?.toInt() ?: PROPERTY_PORT_DEFAULT
-        autoReconnect = configProps[PROPERTY_AUTO_RECONNECT]?.toString()?.toBoolean() ?: false
+    override fun start(configProps: Properties) {
+        address = configProps[PropKeys.PROP_IP]?.toString() ?: ""
+        port = configProps[PropKeys.PROP_PORT]?.toString()?.toInt() ?: DEFAULT_PORT
+        autoReconnect = configProps[PropKeys.PROP_AUTO_RECONNECT]?.toString()?.toBoolean() ?: false
         minReconnectRetryTime =
-            configProps[PROPERTY_MIN_RECONNECT_RETRY_TIME]?.toString()?.toInt()
-                ?: PROPERTY_MIN_RECONNECT_RETRY_TIME_DEFAULT
-        maxReconnectRetryTime = configProps[PROPERTY_MAX_RECONNECT_RETRY_TIME]?.toString()?.toInt()
-            ?: PROPERTY_MAX_RECONNECT_RETRY_TIME_DEFAULT
+            configProps[PropKeys.PROP_MIN_RECONNECT_RETRY_TIME]?.toString()?.toInt()
+                ?: MIN_RECONNECT_RETRY_TIME_DEFAULT
+        maxReconnectRetryTime =
+            configProps[PropKeys.PROP_MAX_RECONNECT_RETRY_TIME]?.toString()?.toInt()
+                ?: MAX_RECONNECT_RETRY_TIME_DEFAULT
         currentReconnectRetryTime = min(maxReconnectRetryTime, minReconnectRetryTime)
+        recvBufferSize =
+            configProps[PropKeys.PROP_RECV_BUFFER_SIZE]?.toString()?.toInt()
+                ?: Constants.DEFAULT_BUFFER_SIZE
 
         tcpConnect()
         isInit = true
@@ -82,7 +89,7 @@ internal class TcpClient(private val context: Context) : Connection {
             subscribeManager.clear()
 
             address = ""
-            port = PROPERTY_PORT_DEFAULT
+            port = DEFAULT_PORT
             autoReconnect = false
             isInit = false
         }
@@ -218,7 +225,8 @@ internal class TcpClient(private val context: Context) : Connection {
             commHandler = CommHandler(
                 true,
                 TcpComm(tcpSocket, address, port),
-                logger
+                logger,
+                recvBufferSize = recvBufferSize,
             ).apply {
                 onCommCloseListener = { _, isPassive ->
                     if (isPassive && autoReconnect) {
@@ -278,15 +286,9 @@ internal class TcpClient(private val context: Context) : Connection {
     }
 
     companion object {
-        const val PROPERTY_IP = "ip"
-        const val PROPERTY_PORT = "port"
-        const val PROPERTY_AUTO_RECONNECT = "auto_reconnect"
-        const val PROPERTY_MIN_RECONNECT_RETRY_TIME = "min_reconnect_retry_time"
-        const val PROPERTY_MAX_RECONNECT_RETRY_TIME = "max_reconnect_retry_time"
-
-        const val PROPERTY_PORT_DEFAULT = 8884
-        const val PROPERTY_MIN_RECONNECT_RETRY_TIME_DEFAULT = 4
-        const val PROPERTY_MAX_RECONNECT_RETRY_TIME_DEFAULT = 32
+        const val DEFAULT_PORT = 8884
+        const val MIN_RECONNECT_RETRY_TIME_DEFAULT = 4
+        const val MAX_RECONNECT_RETRY_TIME_DEFAULT = 32
         const val SECOND_TO_MILLISECOND = 1000L
     }
 }

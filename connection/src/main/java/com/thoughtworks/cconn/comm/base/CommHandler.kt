@@ -16,11 +16,12 @@ internal class CommHandler(
     private val logger: Logger,
     var onCommCloseListener: OnCommCloseListener? = null,
     var onMsgArrivedListener: OnMsgArrivedListener? = null,
-    var onConnectionStateChangeListener: OnConnectionStateChangeListener? = null
+    var onConnectionStateChangeListener: OnConnectionStateChangeListener? = null,
+    private val recvBufferSize: Int = DEFAULT_BUFFER_SIZE
 ) : Runnable {
     private var inStream: InputStream? = null
     private var outStream: OutputStream? = null
-    private val buffer: ByteArray = ByteArray(BUFFER_SIZE)
+    private val buffer: ByteArray = ByteArray(recvBufferSize)
     private var bufferDataStartOffset: Int = 0
     private var bufferDataLen: Int = 0
     private var isClose = false
@@ -223,11 +224,10 @@ internal class CommHandler(
     }
 
     private fun bufferLeftSize(): Int {
-        return BUFFER_SIZE - (bufferDataStartOffset + bufferDataLen)
+        return recvBufferSize - (bufferDataStartOffset + bufferDataLen)
     }
 
     companion object {
-        private const val BUFFER_SIZE = 4096
         private const val MSG_COMPLETENESS_NONE = 0
         private const val MSG_COMPLETENESS_FLAG = 1
         private const val MSG_COMPLETENESS_HEADER = 2

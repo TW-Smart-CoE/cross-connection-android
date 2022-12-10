@@ -6,7 +6,7 @@
 package com.thoughtworks.cconn.log
 
 import android.util.Log
-import com.thoughtworks.cconn.definitions.CCONN_TAG
+import com.thoughtworks.cconn.definitions.Constants.CCONN_TAG
 
 internal class DefaultLogger : Logger {
     override fun verbose(message: String) {

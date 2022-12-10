@@ -34,7 +34,7 @@ enum class Method {
     /**
      * Response to request.
      */
-    RESPONSE
+    RESPONSE,
 }
 
 /**
@@ -126,7 +126,7 @@ interface Connection : Module {
      * @param configProps configs of connection, key-value format
      */
     @Throws(Exception::class)
-    fun init(
+    fun start(
         configProps: Properties)
 
     /**

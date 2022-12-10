@@ -10,4 +10,11 @@
     <string name="init">init</string>
     <string name="detect_and_connect">detect and connect</string>
     <string name="close">close</string>
+    <string name="publish">publish</string>
+    <string name="publish_topic">publish topic</string>
+    <string name="publish_data">publish data</string>
+    <string name="subscribe_topic">subscribe topic</string>
+    <string name="subscribe_data">subscribe data</string>
+    <string name="subscribe">subscribe</string>
+    <string name="unsubscribe">unsubscribe</string>
 </resources>

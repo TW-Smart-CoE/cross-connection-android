@@ -22,8 +22,8 @@ import javax.inject.Inject
 
 data class ClientUiState(
     val connectionState: ConnectionState = ConnectionState.DISCONNECTED,
-    val detectFlag: String = "FFFEC1E5",
     val isDetecting: Boolean = false,
+    val detectFlag: String = "FFFE1234",
 )
 
 @HiltViewModel
@@ -46,7 +46,6 @@ class ClientViewModel @Inject constructor(
 
     init {
         connection.addOnConnectionStateChangedListener(onConnectionStateChangeListener)
-        detectAndConnect()
     }
 
     override fun onCleared() {
@@ -60,7 +59,10 @@ class ClientViewModel @Inject constructor(
             it.copy(isDetecting = true)
         }
 
-        detector.startDiscover(Properties()) { props ->
+        detector.startDiscover(Properties().apply {
+            this[PropKeys.PROP_UDP_DETECTOR_FLAG] =
+                Integer.parseUnsignedInt(_clientUiState.value.detectFlag, FLAG_RADIX)
+        }) { props ->
             val serverIp = props[PropKeys.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_IP]?.toString() ?: ""
             val serverPort =
                 props[PropKeys.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_PORT]?.toString() ?: "0"
@@ -69,20 +71,18 @@ class ClientViewModel @Inject constructor(
                 it.copy(isDetecting = false)
             }
 
-            connection.init(Properties().apply {
-                this[PropKeys.PROP_UDP_DETECTOR_FLAG] =
-                    Integer.parseUnsignedInt(_clientUiState.value.detectFlag, FLAG_RADIX)
+            connection.start(Properties().apply {
                 this[PropKeys.PROP_IP] = serverIp
                 this[PropKeys.PROP_PORT] = serverPort
-                this[PropKeys.PROP_AUTO_CONNECT] = true
+                this[PropKeys.PROP_AUTO_RECONNECT] = true
                 this[PropKeys.PROP_MAX_RECONNECT_RETRY_TIME] = MAX_RECONNECT_RETRY_TIME
             })
         }
     }
 
-    fun publish(topic: String, method: Method, data: String) {
+    fun publish(topic: String, method: Method, data: ByteArray) {
         if (connection.getState() == ConnectionState.CONNECTED) {
-            connection.publish(topic, method, DataConverter.stringToByteArray(data))
+            connection.publish(topic, method, data)
         } else {
             Log.e(TAG, "publish failed, not connected")
         }
@@ -107,7 +107,11 @@ class ClientViewModel @Inject constructor(
     }
 
     fun close() {
+        detector.stopDiscover()
         connection.close()
+        _clientUiState.update {
+            it.copy(isDetecting = false)
+        }
     }
 
     companion object {

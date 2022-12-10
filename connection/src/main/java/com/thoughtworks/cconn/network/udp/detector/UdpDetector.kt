@@ -1,5 +1,7 @@
 package com.thoughtworks.cconn.network.udp.detector
 
+import android.util.Log
+import com.thoughtworks.cconn.definitions.Constants.CCONN_TAG
 import com.thoughtworks.cconn.definitions.PropKeys
 import com.thoughtworks.cconn.log.DefaultLogger
 import com.thoughtworks.cconn.log.Logger
@@ -35,33 +37,37 @@ class UdpDetector : NetworkDetector {
         isKeepReceiving = true
 
         Thread {
-            datagramSocket?.let {
-                while (isKeepReceiving && datagramSocket != null) {
-                    logger.debug("Waiting for broadcast on port $broadcastPort")
+            try {
+                datagramSocket?.let {
+                    while (isKeepReceiving && datagramSocket != null) {
+                        logger.debug("Waiting for broadcast on port $broadcastPort")
 
-                    datagramSocket?.let {
-                        val buf = ByteArray(RECV_BUF_LEN)
-                        val packet = DatagramPacket(buf, buf.size)
-                        it.receive(packet)
-                        logger.debug("Received broadcast from ${packet.address.hostAddress}:${packet.port}")
+                        datagramSocket?.let {
+                            val buf = ByteArray(RECV_BUF_LEN)
+                            val packet = DatagramPacket(buf, buf.size)
+                            it.receive(packet)
+                            logger.debug("Received broadcast from ${packet.address.hostAddress}:${packet.port}")
 
-                        if (packet.length == BROADCAST_MSG_HEADER_LEN) {
-                            val receiveMsgFlag = buf.getInt(0)
-                            if (receiveMsgFlag == flag) {
-                                val broadcastMsg = BroadcastMsg()
-                                broadcastMsg.fromByteArray(buf)
+                            if (packet.length == BROADCAST_MSG_HEADER_LEN) {
+                                val receiveMsgFlag = buf.getInt(0)
+                                if (receiveMsgFlag == flag) {
+                                    val broadcastMsg = BroadcastMsg()
+                                    broadcastMsg.fromByteArray(buf)
 
-                                val properties = Properties()
-                                properties[PropKeys.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_IP] =
-                                    intToIpv4String(broadcastMsg.ip)
-                                properties[PropKeys.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_PORT] =
-                                    broadcastMsg.port
+                                    val properties = Properties()
+                                    properties[PropKeys.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_IP] =
+                                        intToIpv4String(broadcastMsg.ip)
+                                    properties[PropKeys.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_PORT] =
+                                        broadcastMsg.port
 
-                                onFoundService.invoke(properties)
+                                    onFoundService.invoke(properties)
+                                }
                             }
                         }
                     }
                 }
+            } catch (e: Throwable) {
+                e.message?.let { Log.w(CCONN_TAG, it) }
             }
         }.start()
     }

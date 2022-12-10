@@ -12,6 +12,8 @@ import com.thoughtworks.cconn.comm.base.CommServerWrapper
 import com.thoughtworks.cconn.comm.base.Msg
 import com.thoughtworks.cconn.comm.base.pubsub.ServerCommPubSubManager
 import com.thoughtworks.cconn.comm.tcp.TcpComm
+import com.thoughtworks.cconn.definitions.Constants
+import com.thoughtworks.cconn.definitions.PropKeys
 import com.thoughtworks.cconn.log.DefaultLogger
 import com.thoughtworks.cconn.log.Logger
 import java.io.IOException
@@ -21,15 +23,17 @@ import java.util.concurrent.Executors
 
 internal class TcpServer(private val context: Context) : Server {
     private var serverSocket: ServerSocket? = null
-
-    private var port: Int = PROPERTY_PORT_DEFAULT
-
+    private var port: Int = DEFAULT_PORT
     private var logger: Logger = DefaultLogger()
     private val serverPubSubManager = ServerCommPubSubManager(logger)
     private val executor = Executors.newScheduledThreadPool(CORE_CONNECTION_COUNT)
+    private var recvBufferSize = Constants.DEFAULT_BUFFER_SIZE
 
     override fun start(configProps: Properties): Boolean {
-        port = configProps[PROPERTY_PORT]?.toString()?.toInt() ?: PROPERTY_PORT_DEFAULT
+        port = configProps[PropKeys.PROP_PORT]?.toString()?.toInt() ?: DEFAULT_PORT
+        recvBufferSize =
+            configProps[PropKeys.PROP_RECV_BUFFER_SIZE]?.toString()?.toInt()
+                ?: Constants.DEFAULT_BUFFER_SIZE
 
         if (serverSocket != null && serverSocket?.isClosed == false) {
             stop()
@@ -55,7 +59,8 @@ internal class TcpServer(private val context: Context) : Server {
                             CommHandler(
                                 false,
                                 TcpComm(socket, socket.inetAddress.hostName, socket.port),
-                                logger
+                                logger,
+                                recvBufferSize = recvBufferSize,
                             )
                         ).apply {
                             commHandler.onCommCloseListener = { _, _ ->
@@ -87,7 +92,7 @@ internal class TcpServer(private val context: Context) : Server {
 
         clearClients()
         serverSocket = null
-        port = PROPERTY_PORT_DEFAULT
+        port = DEFAULT_PORT
     }
 
     override fun handlePublishMessage(msg: Msg) {
@@ -122,7 +127,7 @@ internal class TcpServer(private val context: Context) : Server {
     companion object {
         const val PROPERTY_PORT = "port"
 
-        const val PROPERTY_PORT_DEFAULT = 8884
+        const val DEFAULT_PORT = 8884
         const val CORE_CONNECTION_COUNT = 10
         const val TCP_STATE_CHECK_TIME = 16
         const val SECOND_TO_MILLISECOND = 1000L

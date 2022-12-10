@@ -8,7 +8,7 @@ package com.thoughtworks.cconn.network.nsd.detector
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.util.Log
-import com.thoughtworks.cconn.definitions.CCONN_TAG
+import com.thoughtworks.cconn.definitions.Constants.CCONN_TAG
 import com.thoughtworks.cconn.network.OnFoundService
 import com.thoughtworks.cconn.network.nsd.definitions.TCP_SERVICE_NAME
 import java.util.Properties
