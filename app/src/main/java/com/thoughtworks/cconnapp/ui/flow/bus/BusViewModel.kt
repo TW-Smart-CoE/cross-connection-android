@@ -56,11 +56,11 @@ class BusViewModel @Inject constructor(
                 this[PropKeys.PROP_RECV_BUFFER_SIZE] = _busUiState.value.recvBufferSize
             },
             Properties().apply {
-                this[PropKeys.PROP_UDP_REGISTER_FLAG] =
+                this[PropKeys.PROP_FLAG] =
                     Integer.parseUnsignedInt(_busUiState.value.registerFlag, FLAG_RADIX)
-                this[PropKeys.PROP_UDP_REGISTER_SERVER_IP] = _busUiState.value.serverIp
-                this[PropKeys.PROP_UDP_REGISTER_SERVER_PORT] = _busUiState.value.serverPort
-                this[PropKeys.PROP_UDP_REGISTER_BROADCAST_INTERVAL] =
+                this[PropKeys.PROP_SERVER_IP] = _busUiState.value.serverIp
+                this[PropKeys.PROP_SERVER_PORT] = _busUiState.value.serverPort
+                this[PropKeys.PROP_BROADCAST_INTERVAL] =
                     _busUiState.value.broadcastInterval
             }
         )

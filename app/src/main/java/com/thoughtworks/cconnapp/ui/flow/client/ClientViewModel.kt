@@ -62,12 +62,12 @@ class ClientViewModel @Inject constructor(
         }
 
         detector.startDiscover(Properties().apply {
-            this[PropKeys.PROP_UDP_DETECTOR_FLAG] =
+            this[PropKeys.PROP_FLAG] =
                 Integer.parseUnsignedInt(_clientUiState.value.detectFlag, FLAG_RADIX)
         }) { props ->
-            val serverIp = props[PropKeys.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_IP]?.toString() ?: ""
+            val serverIp = props[PropKeys.PROP_SERVER_IP]?.toString() ?: ""
             val serverPort =
-                props[PropKeys.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_PORT]?.toString() ?: "0"
+                props[PropKeys.PROP_SERVER_PORT]?.toString() ?: "0"
             detector.stopDiscover()
             _clientUiState.update {
                 it.copy(isDetecting = false)

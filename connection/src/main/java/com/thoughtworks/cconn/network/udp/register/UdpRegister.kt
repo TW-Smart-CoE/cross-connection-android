@@ -12,7 +12,6 @@ import com.thoughtworks.cconn.utils.ipv4StringToInt
 import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
-import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.util.*
 
@@ -63,19 +62,19 @@ class UdpRegister(private val context: Context) : NetworkRegister {
     }
 
     override fun register(configProps: Properties) {
-        broadcastPort = configProps[PropKeys.PROP_UDP_REGISTER_BROADCAST_PORT]?.toString()?.toInt()
+        broadcastPort = configProps[PropKeys.PROP_BROADCAST_PORT]?.toString()?.toInt()
             ?: DEFAULT_BROADCAST_PORT
-        broadcastInterval = configProps[PropKeys.PROP_UDP_REGISTER_BROADCAST_INTERVAL]?.toString()?.toInt()
+        broadcastInterval = configProps[PropKeys.PROP_BROADCAST_INTERVAL]?.toString()?.toInt()
             ?: DEFAULT_BROADCAST_INTERVAL
 
-        flag = configProps[PropKeys.PROP_UDP_REGISTER_FLAG]?.toString()?.toInt() ?: DEFAULT_BROADCAST_FLAG
+        flag = configProps[PropKeys.PROP_FLAG]?.toString()?.toInt() ?: DEFAULT_BROADCAST_FLAG
 
-        val strIp = (configProps[PropKeys.PROP_UDP_REGISTER_SERVER_IP] ?: getLocalIpAddress()) as String?
+        val strIp = (configProps[PropKeys.PROP_SERVER_IP] ?: getLocalIpAddress()) as String?
         strIp?.let {
             serverIp = ipv4StringToInt(it)
         }
 
-        serverPort = configProps[PropKeys.PROP_UDP_REGISTER_SERVER_PORT]?.toString()?.toInt() ?: 0
+        serverPort = configProps[PropKeys.PROP_SERVER_PORT]?.toString()?.toInt() ?: 0
 
         startUdpBroadCast()
     }

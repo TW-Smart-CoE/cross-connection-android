@@ -25,9 +25,9 @@ class UdpDetector : NetworkDetector {
     private var flag: Int = 0
 
     override fun startDiscover(configProps: Properties, onFoundService: OnFoundService) {
-        broadcastPort = configProps[PropKeys.PROP_UDP_DETECTOR_BROADCAST_PORT]?.toString()?.toInt()
+        broadcastPort = configProps[PropKeys.PROP_BROADCAST_PORT]?.toString()?.toInt()
             ?: DEFAULT_BROADCAST_PORT
-        flag = configProps[PropKeys.PROP_UDP_DETECTOR_FLAG]?.toString()?.toInt()
+        flag = configProps[PropKeys.PROP_FLAG]?.toString()?.toInt()
             ?: DEFAULT_BROADCAST_FLAG
 
         datagramSocket = DatagramSocket(null)
@@ -55,9 +55,9 @@ class UdpDetector : NetworkDetector {
                                     broadcastMsg.fromByteArray(buf)
 
                                     val properties = Properties()
-                                    properties[PropKeys.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_IP] =
+                                    properties[PropKeys.PROP_SERVER_IP] =
                                         intToIpv4String(broadcastMsg.ip)
-                                    properties[PropKeys.PROP_UDP_DETECTOR_ON_FOUND_SERVICE_PORT] =
+                                    properties[PropKeys.PROP_SERVER_PORT] =
                                         broadcastMsg.port
 
                                     onFoundService.invoke(properties)
