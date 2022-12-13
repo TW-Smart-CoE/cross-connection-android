@@ -56,7 +56,7 @@ fun ClientScreen(
         ) {
             TextField(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .width(108.dp),
                 singleLine = true,
                 value = clientUiState.value.detectFlag,
                 onValueChange = {

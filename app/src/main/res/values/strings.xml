@@ -17,4 +17,13 @@
     <string name="subscribe_data">subscribe data</string>
     <string name="subscribe">subscribe</string>
     <string name="unsubscribe">unsubscribe</string>
+    <string name="tcp_server">tcp server</string>
+    <string name="register_flag">register flag</string>
+    <string name="server_ip">server ip</string>
+    <string name="server_port">server port</string>
+    <string name="broadcast_port">broadcast port</string>
+    <string name="broadcast_interval">broadcast interval</string>
+    <string name="recv_buffer_size">recv buffer size</string>
+    <string name="stop">stop</string>
+    <string name="start">start</string>
 </resources>

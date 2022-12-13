@@ -38,7 +38,7 @@ internal class BroadcastMsg(
 
         var index = 0
 
-        byteArray.putInt(index, DEFAULT_BROADCAST_FLAG)
+        byteArray.putInt(index, flag)
         index += Int.SIZE_BYTES
 
         byteArray.putInt(index, ip)

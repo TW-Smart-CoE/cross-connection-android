@@ -35,7 +35,7 @@ import com.thoughtworks.cconnapp.R
 fun TopBar(
     modifier: Modifier = Modifier,
     title: String,
-    connState: ConnectionState,
+    connState: ConnectionState?,
     leftButton: LeftButton? = null,
     rightButton: RightButton? = null
 ) {
@@ -62,26 +62,28 @@ fun TopBar(
                     .height(10.dp)
                     .wrapContentWidth()
             )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.wrapContentWidth()
-            ) {
-                Image(
-                    painter = painterResource(
-                        id = connectionStateLight(
-                            connState
-                        )
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(10.dp)
-                        .height(10.dp)
-                )
-                Spacer(modifier = Modifier.width(5.dp))
-                Text(
-                    text = connectionStateText(LocalContext.current, connState),
-                    color = colorResource(id = R.color.white)
-                )
+            connState?.let {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.wrapContentWidth()
+                ) {
+                    Image(
+                        painter = painterResource(
+                            id = connectionStateLight(
+                                connState
+                            )
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(10.dp)
+                            .height(10.dp)
+                    )
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(
+                        text = connectionStateText(LocalContext.current, connState),
+                        color = colorResource(id = R.color.white)
+                    )
+                }
             }
         }
         leftButton?.let { button ->
@@ -119,21 +121,23 @@ fun TopBar(
     }
 }
 
-fun connectionStateText(context: Context, connectionState: ConnectionState): String {
+fun connectionStateText(context: Context, connectionState: ConnectionState?): String {
     return when (connectionState) {
         ConnectionState.CONNECTING -> context.getString(R.string.connecting)
         ConnectionState.CONNECTED -> context.getString(R.string.connected)
         ConnectionState.RECONNECTING -> context.getString(R.string.reconnecting)
-        else -> context.getString(R.string.disconnected)
+        ConnectionState.DISCONNECTED -> context.getString(R.string.disconnected)
+        else -> ""
     }
 }
 
-fun connectionStateLight(connectionState: ConnectionState): Int {
+fun connectionStateLight(connectionState: ConnectionState?): Int {
     return when (connectionState) {
         ConnectionState.CONNECTING -> R.drawable.yellow_light
         ConnectionState.CONNECTED -> R.drawable.green_light
         ConnectionState.RECONNECTING -> R.drawable.yellow_light
-        else -> R.drawable.red_light
+        ConnectionState.DISCONNECTED -> R.drawable.red_light
+        else -> R.drawable.transparent_light
     }
 }
 

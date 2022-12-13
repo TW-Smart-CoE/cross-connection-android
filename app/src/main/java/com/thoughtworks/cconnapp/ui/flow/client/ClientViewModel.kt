@@ -120,9 +120,9 @@ class ClientViewModel @Inject constructor(
         }
     }
 
-    fun updateFlag(s: String) {
+    fun updateFlag(flag: String) {
         _clientUiState.update {
-            it.copy(detectFlag = s)
+            it.copy(detectFlag = flag)
         }
     }
 
