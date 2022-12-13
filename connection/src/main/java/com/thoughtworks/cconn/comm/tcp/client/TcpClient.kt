@@ -171,7 +171,7 @@ internal class TcpClient(private val context: Context) : Connection {
         }
     }
 
-    override fun unSubscribe(topic: String, method: Method) {
+    override fun unsubscribe(topic: String, method: Method) {
         if (!isInit) {
             return
         }

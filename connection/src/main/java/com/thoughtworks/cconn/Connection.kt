@@ -178,5 +178,5 @@ interface Connection : Module {
      * @param method message type
      */
     @Throws(Exception::class)
-    fun unSubscribe(topic: String, method: Method)
+    fun unsubscribe(topic: String, method: Method)
 }

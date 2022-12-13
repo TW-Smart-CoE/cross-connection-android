@@ -81,15 +81,18 @@ fun ClientScreen(
                     .fillMaxWidth()
                     .wrapContentHeight(),
                 connectionState = clientUiState.value.connectionState,
+                receivedData = clientUiState.value.receivedData,
                 object: PubSubPanelCallback {
                     override fun publish(topic: String, method: Method, data: ByteArray) {
                         viewModel.publish(topic, method, data)
                     }
 
                     override fun subscribe(topic: String, method: Method) {
+                        viewModel.subscribe(topic, method)
                     }
 
                     override fun unsubscribe(topic: String, method: Method) {
+                        viewModel.unsubscribe(topic, method)
                     }
                 }
             )

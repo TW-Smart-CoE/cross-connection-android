@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -30,7 +32,6 @@ data class PubSubPanelData(
     val publishData: String = "",
     val subscribeTopic: String = "/execute_cmd_list",
     val subscribeMethod: Method = Method.REQUEST,
-    val subscribeData: String = "",
     val subscribeState: Boolean = false,
 )
 
@@ -53,6 +54,7 @@ val methodList =
 fun PubSubPanel(
     modifier: Modifier = Modifier,
     connectionState: ConnectionState,
+    receivedData: String,
     pubSubPanelCallback: PubSubPanelCallback,
 ) {
     var panelData by remember { mutableStateOf(PubSubPanelData()) }
@@ -169,7 +171,12 @@ fun PubSubPanel(
                 .weight(1f)
                 .wrapContentHeight(),
             enabled = connectionState == ConnectionState.CONNECTED,
-            onClick = { /*TODO*/ }) {
+            onClick = {
+                pubSubPanelCallback.subscribe(
+                    panelData.subscribeTopic,
+                    panelData.subscribeMethod
+                )
+            }) {
             Text(text = stringResource(id = R.string.subscribe))
         }
         Spacer(
@@ -181,13 +188,19 @@ fun PubSubPanel(
                 .weight(1f)
                 .wrapContentHeight(),
             enabled = connectionState == ConnectionState.CONNECTED,
-            onClick = { /*TODO*/ }) {
+            onClick = {
+                pubSubPanelCallback.unsubscribe(
+                    panelData.subscribeTopic,
+                    panelData.subscribeMethod
+                )
+            }) {
             Text(text = stringResource(id = R.string.unsubscribe))
         }
     }
     Text(
         modifier = Modifier
-            .fillMaxWidth(),
-        text = panelData.subscribeData,
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState()),
+        text = receivedData,
     )
 }

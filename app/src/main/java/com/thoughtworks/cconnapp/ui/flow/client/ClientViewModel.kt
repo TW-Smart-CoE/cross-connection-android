@@ -8,6 +8,7 @@ import com.thoughtworks.cconn.ConnectionState
 import com.thoughtworks.cconn.ConnectionType
 import com.thoughtworks.cconn.Method
 import com.thoughtworks.cconn.NetworkDiscoveryType
+import com.thoughtworks.cconn.OnActionListener
 import com.thoughtworks.cconn.OnConnectionStateChangeListener
 import com.thoughtworks.cconn.OnDataListener
 import com.thoughtworks.cconn.definitions.PropKeys
@@ -24,6 +25,7 @@ data class ClientUiState(
     val connectionState: ConnectionState = ConnectionState.DISCONNECTED,
     val isDetecting: Boolean = false,
     val detectFlag: String = "FFFE1234",
+    val receivedData: String = "",
 )
 
 @HiltViewModel
@@ -92,11 +94,29 @@ class ClientViewModel @Inject constructor(
         if (connection.getState() == ConnectionState.CONNECTED) {
             connection.subscribe(topic, method, object : OnDataListener {
                 override fun invoke(topic: String, method: Method, data: ByteArray) {
-                    println(DataConverter.byteArrayToString(data))
+                    _clientUiState.update {
+                        it.copy(receivedData = "$topic ${method.name} ${DataConverter.byteArrayToString(data)}\n\n${it.receivedData}")
+                    }
+                }
+            }, object : OnActionListener {
+                override fun onSuccess() {
+                    Log.d(TAG, "subscribe success")
+                }
+
+                override fun onFailure(throwable: Throwable) {
+                    Log.e(TAG, "subscribe failed")
                 }
             })
         } else {
             Log.e(TAG, "subscribe failed, not connected")
+        }
+    }
+
+    fun unsubscribe(topic: String, method: Method) {
+        if (connection.getState() == ConnectionState.CONNECTED) {
+            connection.unsubscribe(topic, method)
+        } else {
+            Log.e(TAG, "unSubscribe failed, not connected")
         }
     }
 
