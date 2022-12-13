@@ -13,6 +13,7 @@ import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
+import java.net.InetSocketAddress
 import java.util.*
 
 class UdpRegister(private val context: Context) : NetworkRegister {
@@ -27,8 +28,9 @@ class UdpRegister(private val context: Context) : NetworkRegister {
     private var datagramSocket: DatagramSocket? = null
 
     private fun startUdpBroadCast() {
-        datagramSocket =
-            DatagramSocket(broadcastPort, InetAddress.getByName(ANY_ADDRESS))
+        datagramSocket = DatagramSocket(null)
+        datagramSocket?.reuseAddress = true
+        datagramSocket?.bind(InetSocketAddress(ANY_ADDRESS, broadcastPort))
         datagramSocket?.let { udpSocket ->
             udpSocket.broadcast = true
             isSendBroadcast = true
