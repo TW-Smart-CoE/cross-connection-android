@@ -36,7 +36,7 @@ build.gradle.kts
 
 ```
 dependencies {
-   implementation 'com.github.TW-Smart-CoE:cross-connection-android:0.2.1'
+   implementation 'com.github.TW-Smart-CoE:cross-connection-android:0.2.2'
 }
 ```
 
@@ -44,7 +44,7 @@ build.gradle
 
 ```
 dependencies {
-   implementation("com.github.TW-Smart-CoE:cross-connection-android:0.2.1")
+   implementation("com.github.TW-Smart-CoE:cross-connection-android:0.2.2")
 }
 ```
 

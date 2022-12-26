@@ -67,7 +67,7 @@ class UdpRegister(private val context: Context) : NetworkRegister {
         broadcastInterval = configProps[PropKeys.PROP_BROADCAST_INTERVAL]?.toString()?.toInt()
             ?: DEFAULT_BROADCAST_INTERVAL
 
-        flag = configProps[PropKeys.PROP_FLAG]?.toString()?.toInt() ?: DEFAULT_BROADCAST_FLAG
+        flag = configProps[PropKeys.PROP_FLAG]?.toString()?.toLong()?.toInt() ?: DEFAULT_BROADCAST_FLAG
 
         val strIp = (configProps[PropKeys.PROP_SERVER_IP] ?: getLocalIpAddress()) as String?
         strIp?.let {
