@@ -12,7 +12,6 @@ import com.thoughtworks.cconn.utils.ipv4StringToInt
 import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
-import java.net.InetSocketAddress
 import java.util.*
 
 class UdpRegister(private val context: Context) : NetworkRegister {
@@ -29,7 +28,6 @@ class UdpRegister(private val context: Context) : NetworkRegister {
     private fun startUdpBroadCast() {
         datagramSocket = DatagramSocket(null)
         datagramSocket?.reuseAddress = true
-        datagramSocket?.bind(InetSocketAddress(ANY_ADDRESS, broadcastPort))
         datagramSocket?.let { udpSocket ->
             udpSocket.broadcast = true
             isSendBroadcast = true
@@ -88,7 +86,6 @@ class UdpRegister(private val context: Context) : NetworkRegister {
     }
 
     companion object {
-        private const val ANY_ADDRESS = "0.0.0.0"
         private const val DEFAULT_BROADCAST_PORT = 12000
         private const val DEFAULT_BROADCAST_INTERVAL = 10000
         private const val DEFAULT_BROADCAST_FLAG = 0xFFFEC1E5.toInt()
