@@ -11,6 +11,8 @@ import com.thoughtworks.cconn.Server
 import com.thoughtworks.cconn.comm.base.Msg
 import com.thoughtworks.cconn.comm.bluetooth.server.BluetoothServer
 import com.thoughtworks.cconn.comm.tcp.server.TcpServer
+import com.thoughtworks.cconn.log.DefaultLogger
+import com.thoughtworks.cconn.log.Logger
 import java.util.*
 
 
@@ -20,6 +22,7 @@ internal class CrossConnectionBus(private val context: Context) : Bus {
     private var handlerThread = HandlerThread(CROSS_CONNECTION_BUS_HANDLER_THREAD_NAME)
     private lateinit var messageHandler: Handler
     private var initialized = false
+    private var logger: Logger = DefaultLogger()
 
     override fun initialize(): Boolean {
         if (initialized) {
@@ -71,6 +74,10 @@ internal class CrossConnectionBus(private val context: Context) : Bus {
             entry.value.register.unregister()
             entry.value.server.stop()
         }
+    }
+
+    override fun setLogger(logger: Logger) {
+        this.logger = logger
     }
 
     private fun createServerCallback(server: Server) =
