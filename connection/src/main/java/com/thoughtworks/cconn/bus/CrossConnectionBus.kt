@@ -21,11 +21,11 @@ internal class CrossConnectionBus(private val context: Context) : Bus {
 
     private var handlerThread = HandlerThread(CROSS_CONNECTION_BUS_HANDLER_THREAD_NAME)
     private lateinit var messageHandler: Handler
-    private var initialized = false
+    private var isInitialized = false
     private var logger: Logger = DefaultLogger()
 
     override fun initialize(): Boolean {
-        if (initialized) {
+        if (isInitialized) {
             return true
         }
 
@@ -35,20 +35,26 @@ internal class CrossConnectionBus(private val context: Context) : Bus {
             ServerStruct(
                 BluetoothServer(context).apply {
                     setCallback(createServerCallback(this))
+                    setLogger(logger)
                 },
-                ConnectionFactory.createRegister(context, NetworkDiscoveryType.BLUETOOTH)
+                ConnectionFactory.createRegister(context, NetworkDiscoveryType.BLUETOOTH).apply {
+                    setLogger(logger)
+                }
             )
 
         serverMap[ConnectionType.TCP] =
             ServerStruct(
                 TcpServer(context).apply {
                     setCallback(createServerCallback(this))
+                    setLogger(logger)
                 },
-                ConnectionFactory.createRegister(context, NetworkDiscoveryType.UDP)
+                ConnectionFactory.createRegister(context, NetworkDiscoveryType.UDP).apply {
+                    setLogger(logger)
+                }
             )
 
-        initialized = true
-        return initialized
+        isInitialized = true
+        return isInitialized
     }
 
     override fun start(
