@@ -64,6 +64,7 @@ class ClientViewModel @Inject constructor(
         detector.startDiscover(Properties().apply {
             this[PropKeys.PROP_FLAG] =
                 Integer.parseUnsignedInt(_clientUiState.value.detectFlag, FLAG_RADIX)
+            this[PropKeys.PROP_BROADCAST_PORT] = 12000
         }) { props ->
             val serverIp = props[PropKeys.PROP_SERVER_IP]?.toString() ?: ""
             val serverPort =
