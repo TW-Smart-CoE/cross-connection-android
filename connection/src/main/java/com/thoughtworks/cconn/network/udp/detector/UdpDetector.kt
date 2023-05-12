@@ -25,10 +25,8 @@ class UdpDetector : NetworkDetector {
     private var flag: Int = 0
 
     override fun startDiscover(configProps: Properties, onFoundService: OnFoundService) {
-        broadcastPort = configProps[PropKeys.PROP_BROADCAST_PORT]?.toString()?.toInt()
-            ?: DEFAULT_BROADCAST_PORT
-        flag = configProps[PropKeys.PROP_FLAG]?.toString()?.toInt()
-            ?: DEFAULT_BROADCAST_FLAG
+        broadcastPort = configProps[PropKeys.PROP_BROADCAST_PORT]?.toString()?.toInt() ?: DEFAULT_BROADCAST_PORT
+        flag = configProps[PropKeys.PROP_FLAG]?.toString()?.toLong()?.toInt() ?: DEFAULT_BROADCAST_FLAG
 
         datagramSocket = DatagramSocket(null)
         datagramSocket?.reuseAddress = true
