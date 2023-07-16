@@ -74,6 +74,8 @@ class ClientViewModel @Inject constructor(
                 it.copy(isDetecting = false)
             }
 
+            Log.d(TAG, "found $serverIp $serverPort")
+
             connection.start(Properties().apply {
                 this[PropKeys.PROP_IP] = serverIp
                 this[PropKeys.PROP_PORT] = serverPort
