@@ -11,14 +11,17 @@ internal class ClientCommPubSubManager(private var logger: Logger) {
         this.logger = logger
     }
 
+    @Synchronized
     fun subscribe(subscription: Subscription) {
         subscriptionMap[subscription.topic] = subscription
     }
 
+    @Synchronized
     fun unsubscribe(topic: String) {
         subscriptionMap.remove(topic)
     }
 
+    @Synchronized
     fun clear() {
         subscriptionMap.clear()
     }

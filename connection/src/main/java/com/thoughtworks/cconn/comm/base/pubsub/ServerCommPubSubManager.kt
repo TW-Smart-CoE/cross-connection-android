@@ -26,10 +26,12 @@ internal class ServerCommPubSubManager(private var logger: Logger) {
         }
     }
 
+    @Synchronized
     fun addCommWrapper(commServerWrapper: CommServerWrapper) {
         commServerWrapperList.add(commServerWrapper)
     }
 
+    @Synchronized
     fun removeCommWrapper(commServerWrapper: CommServerWrapper) {
         commServerWrapperList.remove(commServerWrapper)
     }
@@ -38,6 +40,7 @@ internal class ServerCommPubSubManager(private var logger: Logger) {
         return commServerWrapperList.size
     }
 
+    @Synchronized
     fun clearAllCommWrappers() {
         commServerWrapperList.forEach {
             it.clear()
@@ -46,6 +49,7 @@ internal class ServerCommPubSubManager(private var logger: Logger) {
         commServerWrapperList.clear()
     }
 
+    @Synchronized
     fun handlePublishMsgSelf(msg: Msg) {
         val fullTopic = DataConverter.byteArrayToString(msg.topic)
 
