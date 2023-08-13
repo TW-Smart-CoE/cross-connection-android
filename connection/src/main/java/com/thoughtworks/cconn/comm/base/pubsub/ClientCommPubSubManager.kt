@@ -26,6 +26,7 @@ internal class ClientCommPubSubManager(private var logger: Logger) {
         subscriptionMap.clear()
     }
 
+    @Synchronized
     fun invokeMatchedCallback(fullTopic: String, data: ByteArray) {
         subscriptionMap.forEach {
             if (TopicUtils.isTopicMatch(it.key, fullTopic)) {
