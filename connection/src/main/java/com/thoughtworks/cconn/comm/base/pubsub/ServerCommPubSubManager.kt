@@ -36,6 +36,7 @@ internal class ServerCommPubSubManager(private var logger: Logger) {
         commServerWrapperList.remove(commServerWrapper)
     }
 
+    @Synchronized
     fun clientCount(): Int {
         return commServerWrapperList.size
     }
