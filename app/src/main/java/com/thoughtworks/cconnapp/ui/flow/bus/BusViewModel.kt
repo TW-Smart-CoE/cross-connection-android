@@ -6,6 +6,7 @@ import com.thoughtworks.cconn.ConnectionFactory
 import com.thoughtworks.cconn.ConnectionType
 import com.thoughtworks.cconn.definitions.Constants
 import com.thoughtworks.cconn.definitions.PropKeys
+import com.thoughtworks.cconn.utils.DataConverter
 import com.thoughtworks.cconn.utils.getLocalIpAddress
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -62,6 +63,8 @@ class BusViewModel @Inject constructor(
                 this[PropKeys.PROP_BROADCAST_PORT] = 12000
                 this[PropKeys.PROP_BROADCAST_INTERVAL] =
                     _busUiState.value.broadcastInterval
+                this[PropKeys.PROP_BROADCAST_DATA] = DataConverter.stringToByteArray("hello data")
+                this[PropKeys.PROP_BROADCAST_DEBUG_MODE] = true
             }
         )
 

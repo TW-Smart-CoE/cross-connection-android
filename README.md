@@ -55,7 +55,7 @@ build.gradle.kts
 
 ```
 dependencies {
-   implementation 'com.github.TW-Smart-CoE:cross-connection-android:0.2.5'
+   implementation 'com.github.TW-Smart-CoE:cross-connection-android:{latest_version}'
 }
 ```
 
@@ -63,7 +63,7 @@ build.gradle
 
 ```
 dependencies {
-   implementation("com.github.TW-Smart-CoE:cross-connection-android:0.2.5")
+   implementation("com.github.TW-Smart-CoE:cross-connection-android:{latest_version}")
 }
 ```
 
@@ -81,6 +81,7 @@ import com.thoughtworks.cconn.ConnectionFactory
 import com.thoughtworks.cconn.ConnectionType
 import com.thoughtworks.cconn.definitions.Constants
 import com.thoughtworks.cconn.definitions.PropKeys
+import com.thoughtworks.cconn.utils.DataConverter
 import com.thoughtworks.cconn.utils.getLocalIpAddress
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -131,13 +132,14 @@ class BusViewModel @Inject constructor(
                 this[PropKeys.PROP_RECV_BUFFER_SIZE] = _busUiState.value.recvBufferSize
             },
             Properties().apply {
-                this[PropKeys.PROP_FLAG] =
-                    Integer.parseUnsignedInt(_busUiState.value.registerFlag, FLAG_RADIX)
+                this[PropKeys.PROP_FLAG] = Integer.parseUnsignedInt(_busUiState.value.registerFlag, FLAG_RADIX)
                 this[PropKeys.PROP_SERVER_IP] = _busUiState.value.serverIp
                 this[PropKeys.PROP_SERVER_PORT] = _busUiState.value.serverPort
                 this[PropKeys.PROP_BROADCAST_PORT] = 12000
                 this[PropKeys.PROP_BROADCAST_INTERVAL] =
                     _busUiState.value.broadcastInterval
+                this[PropKeys.PROP_BROADCAST_DATA] = DataConverter.stringToByteArray("hello data")
+                this[PropKeys.PROP_BROADCAST_DEBUG_MODE] = true
             }
         )
 
@@ -262,6 +264,7 @@ class ClientViewModel @Inject constructor(
             this[PropKeys.PROP_FLAG] =
                 Integer.parseUnsignedInt(_clientUiState.value.detectFlag, FLAG_RADIX)
             this[PropKeys.PROP_BROADCAST_PORT] = 12000
+            this[PropKeys.PROP_BROADCAST_DEBUG_MODE] = true
         }) { props ->
             val serverIp = props[PropKeys.PROP_SERVER_IP]?.toString() ?: ""
             val serverPort =
@@ -269,6 +272,12 @@ class ClientViewModel @Inject constructor(
             detector.stopDiscover()
             _clientUiState.update {
                 it.copy(isDetecting = false)
+            }
+
+            Log.d(TAG, "found $serverIp $serverPort")
+
+            props[PropKeys.PROP_BROADCAST_DATA]?.let {
+                Log.d(TAG, DataConverter.byteArrayToString(it as ByteArray))
             }
 
             connection.start(Properties().apply {

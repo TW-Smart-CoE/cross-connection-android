@@ -8,11 +8,11 @@ import com.thoughtworks.cconn.utils.putShort
 const val DEFAULT_BROADCAST_FLAG = 0xFFFEC1E5.toInt()
 const val BROADCAST_MSG_HEADER_LEN = 12
 
-internal class BroadcastMsg(
+internal class BroadcastHeader(
     var flag: Int = DEFAULT_BROADCAST_FLAG,
     var ip: Int = 0,
     var port: Short = 0,
-    var reserved: Short = 0
+    var dataLen: Short = 0
 ) {
     fun fromByteArray(byteArray: ByteArray) {
         if (byteArray.size < BROADCAST_MSG_HEADER_LEN) {
@@ -29,7 +29,7 @@ internal class BroadcastMsg(
         port = byteArray.getShort(index)
         index += Short.SIZE_BYTES
 
-        reserved = byteArray.getShort(index)
+        dataLen = byteArray.getShort(index)
         index += Short.SIZE_BYTES
     }
 
@@ -47,7 +47,7 @@ internal class BroadcastMsg(
         byteArray.putShort(index, port)
         index += Short.SIZE_BYTES
 
-        byteArray.putShort(index, reserved)
+        byteArray.putShort(index, dataLen)
         index += Short.SIZE_BYTES
 
         return byteArray
