@@ -62,6 +62,10 @@ internal class CrossConnectionBus(private val context: Context) : Bus {
         serverConfig: Properties,
         networkRegisterConfig: Properties
     ): Boolean {
+        if (!isInitialized) {
+            return false
+        }
+
         val serverStruct = serverMap[connectionType] ?: return false
 
         serverStruct.let {
@@ -79,6 +83,10 @@ internal class CrossConnectionBus(private val context: Context) : Bus {
         connectionType: ConnectionType,
         networkRegisterConfig: Properties
     ): Boolean {
+        if (!isInitialized) {
+            return false
+        }
+
         val serverStruct = serverMap[connectionType] ?: return false
         serverStruct.register.unregister()
         serverStruct.register.register(networkRegisterConfig)
@@ -86,6 +94,10 @@ internal class CrossConnectionBus(private val context: Context) : Bus {
     }
 
     override fun stopAll() {
+        if (!isInitialized) {
+            return
+        }
+
         serverMap.forEach { entry ->
             entry.value.register.unregister()
             entry.value.server.stop()
