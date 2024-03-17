@@ -9,7 +9,9 @@ import android.content.Context
 import com.thoughtworks.cconn.bus.Bus
 import com.thoughtworks.cconn.bus.CrossConnectionBus
 import com.thoughtworks.cconn.comm.bluetooth.client.BluetoothClient
+import com.thoughtworks.cconn.comm.bluetooth.server.BluetoothServer
 import com.thoughtworks.cconn.comm.tcp.client.TcpClient
+import com.thoughtworks.cconn.comm.tcp.server.TcpServer
 import com.thoughtworks.cconn.network.NetworkDetector
 import com.thoughtworks.cconn.network.NetworkRegister
 import com.thoughtworks.cconn.network.bluetooth.detector.BluetoothDetector

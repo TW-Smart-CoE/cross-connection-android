@@ -75,6 +75,16 @@ internal class CrossConnectionBus(private val context: Context) : Bus {
         }
     }
 
+    override fun resetRegister(
+        connectionType: ConnectionType,
+        networkRegisterConfig: Properties
+    ): Boolean {
+        val serverStruct = serverMap[connectionType] ?: return false
+        serverStruct.register.unregister()
+        serverStruct.register.register(networkRegisterConfig)
+        return true
+    }
+
     override fun stopAll() {
         serverMap.forEach { entry ->
             entry.value.register.unregister()

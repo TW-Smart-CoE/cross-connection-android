@@ -7,5 +7,6 @@ import java.util.Properties
 interface Bus: Module {
     fun initialize(): Boolean
     fun start(connectionType: ConnectionType, serverConfig: Properties, networkRegisterConfig: Properties): Boolean
+    fun resetRegister(connectionType: ConnectionType, networkRegisterConfig: Properties): Boolean
     fun stopAll()
 }
