@@ -104,6 +104,16 @@ internal class CrossConnectionBus(private val context: Context) : Bus {
         }
     }
 
+    override fun cleanup() {
+        if (!isInitialized) {
+            return
+        }
+
+        serverMap.clear()
+        handlerThread.quitSafely()
+        isInitialized = false
+    }
+
     override fun setLogger(logger: Logger) {
         this.logger = logger
     }

@@ -9,4 +9,5 @@ interface Bus: Module {
     fun start(connectionType: ConnectionType, serverConfig: Properties, networkRegisterConfig: Properties): Boolean
     fun resetRegister(connectionType: ConnectionType, networkRegisterConfig: Properties): Boolean
     fun stopAll()
+    fun cleanup()
 }
