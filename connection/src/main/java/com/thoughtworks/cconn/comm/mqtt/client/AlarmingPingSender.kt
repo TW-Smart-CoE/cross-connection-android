@@ -53,7 +53,7 @@ internal class AlarmPingSender(private val context: Context) :
         if (hasStarted) {
             val alarmManager =
                 context.getSystemService(Service.ALARM_SERVICE) as AlarmManager
-            alarmManager.cancel(pendingIntent)
+            alarmManager.cancel(pendingIntent!!)
             hasStarted = false
             try {
                 context.unregisterReceiver(alarmReceiver)
@@ -67,7 +67,7 @@ internal class AlarmPingSender(private val context: Context) :
             System.currentTimeMillis() + delayInMilliseconds
         val alarmManager =
             context.getSystemService(Service.ALARM_SERVICE) as AlarmManager
-        alarmManager[AlarmManager.RTC_WAKEUP, nextAlarmInMilliseconds] = pendingIntent
+        alarmManager[AlarmManager.RTC_WAKEUP, nextAlarmInMilliseconds] = pendingIntent!!
     }
 
     internal inner class AlarmReceiver : BroadcastReceiver() {
